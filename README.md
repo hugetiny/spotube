@@ -41,7 +41,7 @@ That means, in the upcoming new versions, you will no longer be able to login wi
   <img width="600" src="assets/spotube_banner.png" alt="Spotube Logo">
 
 An open source, cross-platform music client<br />
-utilizing selected music provider API and YouTube®, Piped.video or JioSaavn as an audio source
+utilizing selected music provider API and YouTube®, Piped.video, JioSaavn or Chinese music platforms (酷我音乐, 酷狗音乐, QQ音乐, 网易音乐, 咪咕音乐) as an audio source
 
 Btw it's not just another Electron app 😉
 

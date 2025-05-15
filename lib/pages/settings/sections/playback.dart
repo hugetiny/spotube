@@ -3,7 +3,7 @@ import 'dart:io';
 import 'package:auto_route/auto_route.dart';
 import 'package:collection/collection.dart';
 import 'package:flutter/gestures.dart';
-import 'package:flutter/material.dart' show ListTile;
+import 'package:flutter/material.dart' show ListTile, Colors;
 
 import 'package:google_fonts/google_fonts.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
@@ -18,6 +18,7 @@ import 'package:spotube/modules/settings/section_card_with_heading.dart';
 import 'package:spotube/components/adaptive/adaptive_select_tile.dart';
 import 'package:spotube/extensions/context.dart';
 import 'package:spotube/modules/settings/youtube_engine_not_installed_dialog.dart';
+import 'package:spotube/services/chinese_music_proxy/chinese_music_proxy.dart';
 import 'package:spotube/provider/audio_player/sources/invidious_instances_provider.dart';
 import 'package:spotube/provider/audio_player/sources/piped_instances_provider.dart';
 import 'package:spotube/provider/user_preferences/user_preferences_provider.dart';
@@ -330,6 +331,83 @@ class SettingsPlaybackSection extends HookConsumerWidget {
                 if (value == null) return;
                 preferencesNotifier.setSearchMode(value);
               },
+            ),
+          // Chinese music platforms section
+          AudioSource.kw ||
+          AudioSource.kg ||
+          AudioSource.tx ||
+          AudioSource.wy ||
+          AudioSource.mg => Column(
+              children: [
+                ListTile(
+                  leading: const Icon(SpotubeIcons.info),
+                  title: Text("中国音乐平台"),
+                  subtitle: Text("使用中国音乐平台作为音源，可以在中国大陆使用Spotube"),
+                ),
+                Consumer(
+                  builder: (context, ref, _) {
+                    final proxy = ref.watch(chineseMusicProxyProvider);
+                    final proxyStatus = ref.watch(
+                      FutureProvider((ref) => proxy.checkProxyStatus()),
+                    );
+                    
+                    return ListTile(
+                      leading: const Icon(SpotubeIcons.api),
+                      title: Text("音乐API代理"),
+                      subtitle: Text(preferences.chineseMusicProxyUrl ?? "未设置"),
+                      trailing: Row(
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          proxyStatus.when(
+                            data: (isWorking) => Container(
+                              width: 12,
+                              height: 12,
+                              decoration: BoxDecoration(
+                                shape: BoxShape.circle,
+                                color: isWorking ? Colors.green : Colors.red,
+                              ),
+                            ),
+                            loading: () => const SizedBox(
+                              width: 12,
+                              height: 12,
+                              child: CircularProgressIndicator(strokeWidth: 2),
+                            ),
+                            error: (_, __) => Container(
+                              width: 12,
+                              height: 12,
+                              decoration: const BoxDecoration(
+                                shape: BoxShape.circle,
+                                color: Colors.red,
+                              ),
+                            ),
+                          ),
+                          const SizedBox(width: 8),
+                          IconButton.outline(
+                            icon: const Icon(SpotubeIcons.edit),
+                            size: ButtonSize.small,
+                            onPressed: () {
+                              showDialog(
+                                context: context,
+                                barrierColor: Colors.black.withValues(alpha: 0.5),
+                                builder: (context) =>
+                                    SettingsPlaybackEditInstanceUrlDialog(
+                                  title: "音乐API代理",
+                                  initialValue: preferences.chineseMusicProxyUrl ?? "",
+                                  onSave: (value) {
+                                    preferencesNotifier.setChineseMusicProxyUrl(
+                                      value.isEmpty ? null : value,
+                                    );
+                                  },
+                                ),
+                              );
+                            },
+                          ),
+                        ],
+                      ),
+                    );
+                  },
+                ),
+              ],
             ),
           _ => const SizedBox.shrink(),
         },
