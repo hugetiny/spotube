@@ -195,6 +195,10 @@ class UserPreferencesNotifier extends Notifier<PreferencesTableData> {
     setData(PreferencesTableCompanion(invidiousInstance: Value(instance)));
   }
 
+  void setChineseMusicProxyUrl(String? url) {
+    setData(PreferencesTableCompanion(chineseMusicProxyUrl: Value(url)));
+  }
+
   void setSearchMode(SearchMode mode) {
     setData(PreferencesTableCompanion(searchMode: Value(mode)));
   }

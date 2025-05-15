@@ -10,6 +10,8 @@ import 'package:spotube/services/sourced_track/sources/invidious.dart';
 import 'package:spotube/services/sourced_track/sources/jiosaavn.dart';
 import 'package:spotube/services/sourced_track/sources/piped.dart';
 import 'package:spotube/services/sourced_track/sources/youtube.dart';
+// Import Chinese music sources
+import 'package:spotube/services/sourced_track/sources/chinese/index.dart';
 import 'package:spotube/utils/service_utils.dart';
 
 abstract class SourcedTrack extends Track {
@@ -86,6 +88,42 @@ abstract class SourcedTrack extends Track {
           sourceInfo: sourceInfo,
           track: track,
         ),
+      // Chinese music platforms
+      AudioSource.kw => KWSourcedTrack(
+          ref: ref,
+          source: source,
+          siblings: siblings,
+          sourceInfo: sourceInfo,
+          track: track,
+        ),
+      AudioSource.kg => KGSourcedTrack(
+          ref: ref,
+          source: source,
+          siblings: siblings,
+          sourceInfo: sourceInfo,
+          track: track,
+        ),
+      AudioSource.tx => TXSourcedTrack(
+          ref: ref,
+          source: source,
+          siblings: siblings,
+          sourceInfo: sourceInfo,
+          track: track,
+        ),
+      AudioSource.wy => WYSourcedTrack(
+          ref: ref,
+          source: source,
+          siblings: siblings,
+          sourceInfo: sourceInfo,
+          track: track,
+        ),
+      AudioSource.mg => MGSourcedTrack(
+          ref: ref,
+          source: source,
+          siblings: siblings,
+          sourceInfo: sourceInfo,
+          track: track,
+        ),
     };
   }
 
@@ -117,6 +155,17 @@ abstract class SourcedTrack extends Track {
           await InvidiousSourcedTrack.fetchFromTrack(track: track, ref: ref),
         AudioSource.jiosaavn =>
           await JioSaavnSourcedTrack.fetchFromTrack(track: track, ref: ref),
+        // Chinese music platforms
+        AudioSource.kw =>
+          await KWSourcedTrack.fetchFromTrack(track: track, ref: ref),
+        AudioSource.kg =>
+          await KGSourcedTrack.fetchFromTrack(track: track, ref: ref),
+        AudioSource.tx =>
+          await TXSourcedTrack.fetchFromTrack(track: track, ref: ref),
+        AudioSource.wy =>
+          await WYSourcedTrack.fetchFromTrack(track: track, ref: ref),
+        AudioSource.mg =>
+          await MGSourcedTrack.fetchFromTrack(track: track, ref: ref),
       };
     } catch (e) {
       if (preferences.audioSource == AudioSource.youtube) {
@@ -142,6 +191,17 @@ abstract class SourcedTrack extends Track {
         JioSaavnSourcedTrack.fetchSiblings(track: track, ref: ref),
       AudioSource.invidious =>
         InvidiousSourcedTrack.fetchSiblings(track: track, ref: ref),
+      // Chinese music platforms
+      AudioSource.kw =>
+        KWSourcedTrack.fetchSiblings(track: track, ref: ref),
+      AudioSource.kg =>
+        KGSourcedTrack.fetchSiblings(track: track, ref: ref),
+      AudioSource.tx =>
+        TXSourcedTrack.fetchSiblings(track: track, ref: ref),
+      AudioSource.wy =>
+        WYSourcedTrack.fetchSiblings(track: track, ref: ref),
+      AudioSource.mg =>
+        MGSourcedTrack.fetchSiblings(track: track, ref: ref),
     };
   }
 

@@ -15,9 +15,22 @@ enum AudioSource {
   youtube,
   piped,
   jiosaavn,
-  invidious;
+  invidious,
+  // Chinese music platforms
+  kw, // 酷我音乐
+  kg, // 酷狗音乐
+  tx, // QQ音乐
+  wy, // 网易音乐
+  mg; // 咪咕音乐
 
-  String get label => name[0].toUpperCase() + name.substring(1);
+  String get label => switch (this) {
+    AudioSource.kw => "酷我音乐",
+    AudioSource.kg => "酷狗音乐",
+    AudioSource.tx => "QQ音乐",
+    AudioSource.wy => "网易音乐",
+    AudioSource.mg => "咪咕音乐",
+    _ => name[0].toUpperCase() + name.substring(1),
+  };
 }
 
 enum YoutubeClientEngine {
@@ -99,6 +112,8 @@ class PreferencesTable extends Table {
       text().withDefault(const Constant("https://pipedapi.kavin.rocks"))();
   TextColumn get invidiousInstance =>
       text().withDefault(const Constant("https://inv.nadeko.net"))();
+  TextColumn get chineseMusicProxyUrl =>
+      text().nullable()();
   TextColumn get themeMode =>
       textEnum<ThemeMode>().withDefault(Constant(ThemeMode.system.name))();
   TextColumn get audioSource =>
@@ -140,6 +155,7 @@ class PreferencesTable extends Table {
       localLibraryLocation: [],
       pipedInstance: "https://pipedapi.kavin.rocks",
       invidiousInstance: "https://inv.nadeko.net",
+      chineseMusicProxyUrl: null,
       themeMode: ThemeMode.system,
       audioSource: AudioSource.youtube,
       youtubeClientEngine: YoutubeClientEngine.youtubeExplode,
